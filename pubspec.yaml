@@ -72,9 +72,10 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 
   assets:
-    - images/
-    - images/2.0x/
-    - images/img_logo.png
-    - images/icon_login_account.png
-    - images/icon_lock.png
+    - assets/
+    - assets/images/
+    - assets/images/2.0x/
+    - assets/images/img_logo.png
+    - assets/images/icon_login_account.png
+    - assets/images/icon_lock.png
 

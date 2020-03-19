@@ -1,7 +1,13 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:wande/AppColors.dart';
-import 'package:wande/AppDimens.dart';
+import 'package:wande/http_request.dart';
+import 'package:wande/res/app_colors.dart';
+import 'package:wande/res/app_dimens.dart';
+
+import 'http_config.dart';
 
 void main() => runApp(MyApp());
 
@@ -28,8 +34,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController mETAccount = TextEditingController();
-  TextEditingController mETPassword = TextEditingController();
+  TextEditingController mETAccount =
+      TextEditingController.fromValue(TextEditingValue(text: "mdteacher"));
+  TextEditingController mETPassword =
+      TextEditingController.fromValue(TextEditingValue(text: "123456"));
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
             Container(
               width: double.infinity,
               height: 100,
-              child: Image.asset("images/img_logo.png"),
+              child: Image.asset("assets/images/img_logo.png"),
             ),
             Container(
               margin: EdgeInsets.fromLTRB(0, 10, 0, 20),
@@ -57,12 +65,12 @@ class _LoginPageState extends State<LoginPage> {
             ),
             //账号输入
             _newLoginEditField(
-                mETAccount, "账号", "images/icon_login_account.png"),
+                mETAccount, "账号", "assets/images/icon_login_account.png"),
             //密码输入
             Container(
               margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-              child:
-                  _newLoginEditField(mETPassword, "密码", "images/icon_lock.png"),
+              child: _newLoginEditField(
+                  mETPassword, "密码", "assets/images/icon_lock.png"),
             ),
             Container(
               width: double.infinity,
@@ -134,5 +142,27 @@ class _LoginPageState extends State<LoginPage> {
   /**
    * 登陆
    */
-  _login(BuildContext context, String account, String password) {}
+  _login(BuildContext context, String account, String password) {
+    login(account, password);
+    var jjjj = 0;
+  }
+
+  login(String account, String password) async {
+//    try {
+    var uri = Uri.http(HttpConfig.BASE_URL, "juvenile-mobile/core/oauth/login",
+        {'userCode': account, 'userPwd': password});
+    var httpClient = new HttpClient();
+    var request = await httpClient.postUrl(uri);
+    var response = await request.close();
+    var responseBody = await response.transform(utf8.decoder).join();
+    var bodyStr = await responseBody.toString();
+    print("body_data 1:" + bodyStr);
+    showDialog(
+        context: context,
+        child: AlertDialog(title: Text("提示"), content: Text(bodyStr),actions: <Widget>[float],));
+    print(json);
+//    } catch (error) {
+//      print(error);
+//    }
+  }
 }
