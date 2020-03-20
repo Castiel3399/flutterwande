@@ -3,11 +3,15 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:wande/http_request.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:wande/bean/user_bean.dart';
+import 'package:wande/dialog/loading_dialog.dart';
+import 'package:wande/http/BaseResonse.dart';
+import 'package:wande/http/http_request.dart';
 import 'package:wande/res/app_colors.dart';
 import 'package:wande/res/app_dimens.dart';
 
-import 'http_config.dart';
+import 'http/http_config.dart';
 
 void main() => runApp(MyApp());
 
@@ -148,21 +152,17 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   login(String account, String password) async {
-//    try {
-    var uri = Uri.http(HttpConfig.BASE_URL, "juvenile-mobile/core/oauth/login",
-        {'userCode': account, 'userPwd': password});
-    var httpClient = new HttpClient();
-    var request = await httpClient.postUrl(uri);
-    var response = await request.close();
-    var responseBody = await response.transform(utf8.decoder).join();
-    var bodyStr = await responseBody.toString();
-    print("body_data 1:" + bodyStr);
     showDialog(
         context: context,
-        child: AlertDialog(title: Text("提示"), content: Text(bodyStr),actions: <Widget>[float],));
-    print(json);
-//    } catch (error) {
-//      print(error);
-//    }
+        child: LoadingDialog(
+          content: "",
+        ).build(context));
+
+    HttpRequest().requestPost(
+        "core/oauth/login",
+        HttpRequestCallback<BaseResponse<UserBean>>(){},
+        {'userCode': account, 'userPwd': password});
+    Navigator.pop(context);
+    Fluttertoast.showToast(msg: null);
   }
 }
