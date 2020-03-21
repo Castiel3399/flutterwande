@@ -1,4 +1,6 @@
-class UserBean {
+import 'package:wande/bean/base_json_bean.dart';
+
+class UserBean extends BaseJsonBean {
   int id;
   String userId;
   String userCode;
@@ -21,4 +23,8 @@ class UserBean {
   String updateTime;
   String itemCode;
   int schoolYear;
+
+  UserBean.fromJson(Map<String, dynamic> json) {
+    userId = json["userId"];
+  }
 }

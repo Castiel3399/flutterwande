@@ -1,11 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
-import 'package:wande/http/BaseResonse.dart';
-import 'package:wande/http/http_config.dart';
+import 'package:wande/bean/base_json_bean.dart';
+import 'package:wande/http/base_resonse.dart';
 
-class HttpRequest<T> {
+import 'http_config.dart';
+
+import 'http_request_callback.dart';
+
+class HttpRequest<T extends BaseJsonBean> {
   /**
    * get 请求
    */
@@ -19,7 +22,7 @@ class HttpRequest<T> {
    */
   void requestPost(String unencodedPath, HttpRequestCallback<T> callBack,
       [Map<String, String> params]) async {
-    quest(await HttpClient().putUrl(getUri(unencodedPath, params)), callBack);
+    quest(await HttpClient().postUrl(getUri(unencodedPath, params)), callBack);
   }
 
   /**
@@ -32,14 +35,19 @@ class HttpRequest<T> {
 
   void quest(HttpClientRequest request, HttpRequestCallback<T> callBack) async {
     var response = await request.close();
-    var json = await response.transform(utf8.decoder).join();
-    print(json);
-
+    var statusCode = response.statusCode;
+    if (statusCode == 200) {
+      var json = await response.transform(utf8.decoder).join();
+      print(json);
+      var jsonObject = jsonDecode(json);
+      BaseResponse baseResponse = BaseResponse<T>.fromJson(jsonObject);
+      if (baseResponse.getSuccess()) {
+        callBack.onSuccess(baseResponse.data);
+      } else {
+        callBack.onError(baseResponse.resultCode, baseResponse.getMsg());
+      }
+    } else {
+      callBack.onError(statusCode, "数据获取异常");
+    }
   }
-}
-
-abstract class HttpRequestCallback<T> {
-  void onSuccess(T t);
-
-  void onError(String errCode, String errMsg);
 }

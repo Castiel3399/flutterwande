@@ -1,17 +1,17 @@
-import 'dart:convert';
 import 'dart:io';
+import 'package:convert/convert.dart';
+import 'package:crypto/crypto.dart';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wande/bean/user_bean.dart';
 import 'package:wande/dialog/loading_dialog.dart';
-import 'package:wande/http/BaseResonse.dart';
+import 'package:wande/http/base_resonse.dart';
 import 'package:wande/http/http_request.dart';
+import 'package:wande/http/http_request_callback.dart';
 import 'package:wande/res/app_colors.dart';
 import 'package:wande/res/app_dimens.dart';
-
-import 'http/http_config.dart';
 
 void main() => runApp(MyApp());
 
@@ -39,7 +39,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   TextEditingController mETAccount =
-      TextEditingController.fromValue(TextEditingValue(text: "mdteacher"));
+      TextEditingController.fromValue(TextEditingValue(text: "wdteacher"));
   TextEditingController mETPassword =
       TextEditingController.fromValue(TextEditingValue(text: "123456"));
 
@@ -158,11 +158,22 @@ class _LoginPageState extends State<LoginPage> {
           content: "",
         ).build(context));
 
-    HttpRequest().requestPost(
-        "core/oauth/login",
-        HttpRequestCallback<BaseResponse<UserBean>>(){},
-        {'userCode': account, 'userPwd': password});
+    var pw = md5.convert(utf8.encode(password)).toString();
+    print(pw);
+    HttpRequest().requestPost("core/oauth/login", getCallback(),
+        {'userCode': account, 'userPwd': pw});
     Navigator.pop(context);
-    Fluttertoast.showToast(msg: null);
   }
+
+  HttpRequestCallback<UserBean> getCallback() {
+    return Callback();
+  }
+}
+
+class Callback extends HttpRequestCallback<UserBean> {
+  @override
+  void onError(int errCode, String errMsg) {}
+
+  @override
+  void onSuccess(UserBean t) {}
 }
