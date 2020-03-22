@@ -1,6 +1,4 @@
-import 'package:wande/bean/base_json_bean.dart';
-
-class UserBean extends BaseJsonBean {
+class UserBean {
   int id;
   String userId;
   String userCode;

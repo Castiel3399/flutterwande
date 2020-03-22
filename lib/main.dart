@@ -1,13 +1,11 @@
-import 'dart:io';
-import 'package:convert/convert.dart';
-import 'package:crypto/crypto.dart';
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:wande/bean/user_bean.dart';
 import 'package:wande/dialog/loading_dialog.dart';
-import 'package:wande/http/base_resonse.dart';
 import 'package:wande/http/http_request.dart';
 import 'package:wande/http/http_request_callback.dart';
 import 'package:wande/res/app_colors.dart';
@@ -158,24 +156,10 @@ class _LoginPageState extends State<LoginPage> {
           content: "",
         ).build(context));
 
-    var pw = md5.convert(utf8.encode(password)).toString();
-    print(pw);
-    HttpRequest().requestPost("core/oauth/login", getCallback(),
-        {'userCode': account, 'userPwd': pw});
-    Navigator.pop(context);
+    HttpRequest().requestPost(
+        "core/oauth/login", HttpRequestCallback(onSuccess: (result) {}), {
+      'userCode': account,
+      'userPwd': md5.convert(utf8.encode(password)).toString()
+    });
   }
-
-  HttpRequestCallback<UserBean> getCallback() {
-    return Callback();
-  }
-}
-
-class Callback extends HttpRequestCallback<UserBean> {
-  @override
-  void onError(int errCode, String errMsg) {
-
-  }
-
-  @override
-  void onSuccess(UserBean t) {}
 }

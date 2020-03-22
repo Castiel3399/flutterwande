@@ -1,7 +1,6 @@
-import 'package:wande/bean/base_json_bean.dart';
 import 'package:wande/factory/entity_factory.dart';
 
-class BaseResponse<T extends BaseJsonBean> extends BaseJsonBean {
+class BaseResponse<T> {
   bool success;
   String msg;
   String time;

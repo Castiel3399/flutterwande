@@ -1,7 +1,10 @@
-import 'package:wande/bean/base_json_bean.dart';
+typedef void ResponseSuccessCallback<T>(T result);
+typedef void ResponseErrorCallback(int errorCode, String errMsg);
 
-abstract class HttpRequestCallback<T extends BaseJsonBean> {
-  void onSuccess(T t);
+class HttpRequestCallback<T> {
+  ResponseSuccessCallback<T> onSuccess;
 
-  void onError(int errCode, String errMsg);
+  ResponseErrorCallback onError;
+
+  HttpRequestCallback({ResponseSuccessCallback this.onSuccess, ResponseErrorCallback this.onError});
 }
