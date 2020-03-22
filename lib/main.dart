@@ -172,7 +172,9 @@ class _LoginPageState extends State<LoginPage> {
 
 class Callback extends HttpRequestCallback<UserBean> {
   @override
-  void onError(int errCode, String errMsg) {}
+  void onError(int errCode, String errMsg) {
+
+  }
 
   @override
   void onSuccess(UserBean t) {}
