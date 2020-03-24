@@ -157,9 +157,19 @@ class _LoginPageState extends State<LoginPage> {
         ).build(context));
 
     HttpRequest().requestPost(
-        "core/oauth/login", HttpRequestCallback(onSuccess: (result) {}), {
-      'userCode': account,
-      'userPwd': md5.convert(utf8.encode(password)).toString()
-    });
+        "core/oauth/login",
+        HttpRequestCallback(
+            onSuccess: (result) {
+              requestToken(result);
+            },
+            onError: (errCode, errMsg) {}),
+        {
+          'userCode': account,
+          'userPwd': md5.convert(utf8.encode(password)).toString()
+        });
+  }
+
+  requestToken(result) {
+
   }
 }
