@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wande/anim_widget/loading_image.dart';
 import 'package:wande/res/app_dimens.dart';
 
 class LoadingDialog extends StatelessWidget {
@@ -15,12 +16,16 @@ class LoadingDialog extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Image.asset("assets/images/icon_loading.png"),
-          Text(
-            content,
-            style: TextStyle(
-                color: Colors.white, fontSize: AppDimens.text_size_normal),
-          )
+          //image
+          LoadingImageStatelessWidget("assets/images/icon_loading.png"),
+          //text
+          Padding(
+              padding: EdgeInsets.all(10),
+              child: Text(
+                content,
+                style: TextStyle(
+                    color: Colors.white, fontSize: AppDimens.text_size_normal),
+              )),
         ],
       ),
     );

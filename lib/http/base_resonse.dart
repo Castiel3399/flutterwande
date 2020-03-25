@@ -23,6 +23,6 @@ class BaseResponse<T> {
     success = json["success"];
     time = json["time"];
     msg = json["msg"];
-    data = EntityFactory.generateOBJ(json["data"]);
+    data = EntityFactory.generateOBJ<T>(json["data"]);
   }
 }

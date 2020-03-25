@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:wande/bean/user_bean.dart';
 import 'package:wande/dialog/loading_dialog.dart';
+import 'package:wande/http/http_config.dart';
 import 'package:wande/http/http_request.dart';
 import 'package:wande/http/http_request_callback.dart';
 import 'package:wande/res/app_colors.dart';
 import 'package:wande/res/app_dimens.dart';
+import 'package:wande/utils/share_utils.dart';
 
 void main() => runApp(MyApp());
 
@@ -149,27 +151,43 @@ class _LoginPageState extends State<LoginPage> {
     var jjjj = 0;
   }
 
-  login(String account, String password) async {
+  /**
+   * 登录
+   */
+  login(String account, String password) {
     showDialog(
         context: context,
         child: LoadingDialog(
-          content: "",
-        ).build(context));
+          content: "登录中",
+        ));
 
-    HttpRequest().requestPost(
+    HttpRequest<UserBean>().requestPost(
         "core/oauth/login",
-        HttpRequestCallback(
-            onSuccess: (result) {
-              requestToken(result);
-            },
-            onError: (errCode, errMsg) {}),
+        HttpRequestCallback(onSuccess: (result) {
+          requestToken(result);
+        }, onError: (errCode, errMsg) {
+          Navigator.pop(context);
+        }),
         {
           'userCode': account,
           'userPwd': md5.convert(utf8.encode(password)).toString()
         });
   }
 
-  requestToken(result) {
-
+  requestToken(UserBean result) {
+    ShareUtils.getDeviceId().then((deviceId) {
+      HttpRequest<String>().requestPost(
+          "core/oauth/accessToken",
+          HttpRequestCallback(onSuccess: (result) {
+            Navigator.pop(context);
+          }, onError: (errCode, errMsg) {
+            Navigator.pop(context);
+          }),
+          {
+            'operatorId': result.userId,
+            'accessKey': HttpConfig.ACCESS_KEY,
+            'deviceId': deviceId
+          });
+    });
   }
 }
