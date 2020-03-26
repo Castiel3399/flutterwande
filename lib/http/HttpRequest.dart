@@ -60,6 +60,8 @@ class HttpRequest<T> {
   }
 
   /**
+   *
+   *
    * 添加公共参数
    */
   void addPopParamsAndToken(Map<String, String> params) {
