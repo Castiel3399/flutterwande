@@ -64,7 +64,10 @@ class HttpRequest<T> {
    */
   void addPopParamsAndToken(Map<String, String> params) {
     var popParams = generatePopParams();
+    //添加公共参数
     params.addAll(popParams);
+    //计算token
+    params['token'] = generateToken(params);
   }
 
   /**
@@ -103,4 +106,9 @@ class HttpRequest<T> {
     print(
         "▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲");
   }
+
+  /**
+   * 生成token
+   */
+  generateToken(Map<String, String> params) {}
 }
