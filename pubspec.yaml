@@ -14,7 +14,7 @@ description: 万德_flutter
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -84,4 +84,10 @@ flutter:
     - assets/images/icon_login_account.png
     - assets/images/icon_lock.png
     - assets/images/icon_loading.png
+    - assets/images/icon_home_eva.png
+    - assets/images/icon_home_eva_checked.png
+    - assets/images/icon_home_rank.png
+    - assets/images/icon_home_rank_checked.png
+    - assets/images/icon_home_user.png
+    - assets/images/icon_home_user_checked.png
 

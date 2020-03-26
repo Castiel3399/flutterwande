@@ -1,4 +1,4 @@
-import 'package:wande/factory/entity_factory.dart';
+import 'package:wande/factory/EntityFactory.dart';
 
 class BaseResponse<T> {
   bool success;

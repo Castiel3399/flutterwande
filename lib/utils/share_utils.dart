@@ -3,11 +3,12 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 import 'package:uuid/uuid_util.dart';
-import 'package:wande/bean/user_bean.dart';
+import 'package:wande/bean/UserBean.dart';
 
 class ShareUtils {
   static var USER_BEAN = "user_bean";
   static var IS_LOGIN = "is_login";
+  static var TOKEN = "token";
 
   static String DEVICE_ID = "device_id";
 
@@ -18,7 +19,7 @@ class ShareUtils {
   /**
    * 保存用户bean
    */
-  static saveUserBean(userBean) async {
+  static saveUserBean(UserBean userBean) async {
     var sharedPreferences = await getShare();
     await sharedPreferences.setString(USER_BEAN, jsonEncode(userBean));
   }
@@ -48,6 +49,25 @@ class ShareUtils {
     return await sharedPreferences.getBool(IS_LOGIN);
   }
 
+  /**
+   * 获取token
+   */
+  static Future<bool> getToken() async {
+    var sharedPreferences = await getShare();
+    return await sharedPreferences.getBool(TOKEN);
+  }
+
+  /**
+   * 保存token
+   */
+  static saveToken(token) async {
+    var sharedPreferences = await getShare();
+    await sharedPreferences.setString(TOKEN, token);
+  }
+
+  /**
+   * 获取设备id
+   */
   static Future<String> getDeviceId() async {
     var devideId = await (await getShare()).getString(DEVICE_ID);
     if (devideId == null) {

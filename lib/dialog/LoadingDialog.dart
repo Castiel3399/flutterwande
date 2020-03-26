@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wande/anim_widget/loading_image.dart';
-import 'package:wande/res/app_dimens.dart';
+import 'package:wande/anim_widget/LoadingImageStatelessWidget.dart';
+import 'package:wande/res/AppDimens.dart';
 
 class LoadingDialog extends StatelessWidget {
   final String content;
@@ -9,7 +9,6 @@ class LoadingDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Material(
       type: MaterialType.transparency,
       child: Column(

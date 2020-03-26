@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:wande/http/base_resonse.dart';
-import 'package:wande/http/http_request_callback.dart';
+import 'package:wande/http/BaseResponse.dart';
+import 'package:wande/http/HttpRequestCallback.dart';
 
-import 'http_config.dart';
+import 'HttpConfig.dart';
 
 class HttpRequest<T> {
   /**

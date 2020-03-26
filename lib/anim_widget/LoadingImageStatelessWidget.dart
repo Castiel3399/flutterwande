@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class LoadingImageStatelessWidget extends StatelessWidget {
@@ -26,12 +28,16 @@ class LoadingImageState extends State<LoadingImageStatefullWidget>
     with SingleTickerProviderStateMixin {
   String imgPath;
   AnimationController animationController;
+  var curvedAnimation;
 
   LoadingImageState(this.imgPath) {
     animationController = AnimationController(
         reverseDuration: Duration(seconds: 10),
         duration: Duration(milliseconds: 1000),
         vsync: this);
+
+    curvedAnimation = CurvedAnimation(
+        parent: animationController, curve: AccelerateAndDecelerateCurve());
     animationController.repeat();
   }
 
@@ -43,7 +49,19 @@ class LoadingImageState extends State<LoadingImageStatefullWidget>
         width: 40,
         height: 40,
       ),
-      turns: animationController,
+      turns: curvedAnimation,
     );
+  }
+}
+
+class AccelerateAndDecelerateCurve extends Curve {
+  //0-1
+  @override
+  double transform(double t) {
+    if (t < 0.5) {
+      return sin(pi * t / 3);
+    } else {
+      return 1 - sin(pi * (1 - t) / 3);
+    }
   }
 }

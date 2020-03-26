@@ -1,4 +1,4 @@
-import 'package:wande/bean/user_bean.dart';
+import 'package:wande/bean/UserBean.dart';
 
 class EntityFactory {
   static T generateOBJ<T>(dynamic json) {

@@ -4,16 +4,25 @@ import 'dart:io';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:wande/bean/user_bean.dart';
-import 'package:wande/dialog/loading_dialog.dart';
-import 'package:wande/http/http_config.dart';
-import 'package:wande/http/http_request.dart';
-import 'package:wande/http/http_request_callback.dart';
-import 'package:wande/res/app_colors.dart';
-import 'package:wande/res/app_dimens.dart';
+import 'package:flutter/services.dart';
+import 'package:wande/base/BasePageRouteBuilder.dart';
+import 'package:wande/bean/UserBean.dart';
+import 'package:wande/dialog/LoadingDialog.dart';
+import 'package:wande/http/HttpConfig.dart';
+import 'package:wande/http/HttpRequest.dart';
+import 'package:wande/http/HttpRequestCallback.dart';
+import 'package:wande/pages/HomePage.dart';
+import 'package:wande/res/AppColors.dart';
+import 'package:wande/res/AppDimens.dart';
 import 'package:wande/utils/share_utils.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  runApp(MyApp());
+  if (Platform.isAndroid) {
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+  }
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -22,8 +31,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: AppColors.purple,
-      ),
+//        primaryColor: AppColors.color_primary,
+          ),
       home: LoginPage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -87,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                         BorderRadius.circular(AppDimens.border_radius_normal)),
                 color: Colors.white,
                 onPressed: () {
-                  _login(context, mETAccount.text, mETPassword.text);
+                  login(mETAccount.text, mETPassword.text);
                 },
                 child: Text("登陆"),
               ),
@@ -144,14 +153,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   /**
-   * 登陆
-   */
-  _login(BuildContext context, String account, String password) {
-    login(account, password);
-    var jjjj = 0;
-  }
-
-  /**
    * 登录
    */
   login(String account, String password) {
@@ -174,17 +175,22 @@ class _LoginPageState extends State<LoginPage> {
         });
   }
 
-  requestToken(UserBean result) {
+  requestToken(UserBean userBean) {
     ShareUtils.getDeviceId().then((deviceId) {
       HttpRequest<String>().requestPost(
           "core/oauth/accessToken",
-          HttpRequestCallback(onSuccess: (result) {
+          HttpRequestCallback(onSuccess: (token) {
+            //获取token成功
             Navigator.pop(context);
+            ShareUtils.saveUserBean(userBean);
+            ShareUtils.saveToken(token);
+            //调主页面
+            Navigator.of(context).push(BasePageRouteBuilder(HomePage()));
           }, onError: (errCode, errMsg) {
             Navigator.pop(context);
           }),
           {
-            'operatorId': result.userId,
+            'operatorId': userBean.userId,
             'accessKey': HttpConfig.ACCESS_KEY,
             'deviceId': deviceId
           });
