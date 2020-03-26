@@ -52,6 +52,12 @@ class LoadingImageState extends State<LoadingImageStatefullWidget>
       turns: curvedAnimation,
     );
   }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
 }
 
 class AccelerateAndDecelerateCurve extends Curve {

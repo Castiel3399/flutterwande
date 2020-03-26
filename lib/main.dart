@@ -176,24 +176,19 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   requestToken(UserBean userBean) {
-    ShareUtils.getDeviceId().then((deviceId) {
-      HttpRequest<String>().requestPost(
-          "core/oauth/accessToken",
-          HttpRequestCallback(onSuccess: (token) {
-            //获取token成功
-            Navigator.pop(context);
-            ShareUtils.saveUserBean(userBean);
-            ShareUtils.saveToken(token);
-            //调主页面
-            Navigator.of(context).push(BasePageRouteBuilder(HomePage()));
-          }, onError: (errCode, errMsg) {
-            Navigator.pop(context);
-          }),
-          {
-            'operatorId': userBean.userId,
-            'accessKey': HttpConfig.ACCESS_KEY,
-            'deviceId': deviceId
-          });
-    });
+    HttpRequest<String>().requestPost(
+        "core/oauth/accessToken",
+        HttpRequestCallback(onSuccess: (token) {
+          //获取token成功
+          Navigator.pop(context);
+          ShareUtils.saveUserBean(userBean);
+          ShareUtils.saveToken(token);
+          ShareUtils.initAppData();
+          //调主页面
+          Navigator.of(context).push(BasePageRouteBuilder(HomePage()));
+        }, onError: (errCode, errMsg) {
+          Navigator.pop(context);
+        }),
+        {'operatorId': userBean.userId});
   }
 }

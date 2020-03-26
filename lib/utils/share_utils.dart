@@ -12,6 +12,10 @@ class ShareUtils {
 
   static String DEVICE_ID = "device_id";
 
+  static UserBean userBean;
+  static String devideId;
+  static String token;
+
   static Future<SharedPreferences> getShare() async {
     return await SharedPreferences.getInstance();
   }
@@ -19,18 +23,26 @@ class ShareUtils {
   /**
    * 保存用户bean
    */
-  static saveUserBean(UserBean userBean) async {
+  static saveUserBean(UserBean userBeanTemp) async {
+    userBean = userBeanTemp;
     var sharedPreferences = await getShare();
-    await sharedPreferences.setString(USER_BEAN, jsonEncode(userBean));
+    await sharedPreferences.setString(USER_BEAN, userBeanTemp.toJson());
   }
 
   /**
    * 获取用户bean
    */
-  static Future<UserBean> getUserBean() async {
+  static UserBean getUserBean() {
+    return userBean;
+  }
+
+  static void initAppData() async {
     var sharedPreferences = await getShare();
     var userBeanJson = await sharedPreferences.getString(USER_BEAN);
-    return UserBean.fromJson(jsonDecode(userBeanJson));
+    userBean = UserBean.fromJsonMap(jsonDecode(userBeanJson));
+    devideId = await getDeviceId();
+    token = await getToken();
+    initDeviceId();
   }
 
   /**
@@ -52,9 +64,9 @@ class ShareUtils {
   /**
    * 获取token
    */
-  static Future<bool> getToken() async {
+  static Future<String> getToken() async {
     var sharedPreferences = await getShare();
-    return await sharedPreferences.getBool(TOKEN);
+    return await sharedPreferences.getString(TOKEN);
   }
 
   /**
@@ -68,12 +80,15 @@ class ShareUtils {
   /**
    * 获取设备id
    */
-  static Future<String> getDeviceId() async {
-    var devideId = await (await getShare()).getString(DEVICE_ID);
-    if (devideId == null) {
+  static String getDeviceId() {
+    return devideId;
+  }
+
+  static void initDeviceId() async {
+    devideId = (await getShare()).getString(DEVICE_ID);
+    if (devideId == null || devideId.isEmpty) {
       devideId = Uuid().v1();
       (await getShare()).setString(DEVICE_ID, devideId);
     }
-    return devideId;
   }
 }
