@@ -1,106 +1,107 @@
 import 'dart:convert';
 
+import 'Role.dart';
+import 'SchoolInfo.dart';
+import 'ClassBean.dart';
+
 class UserBean {
   int id;
-  String userId;
-  String userCode;
-  String schoolCode;
-  String userName;
-  String userLogo;
-  String userSex;
-  String userType;
-  String userStatus;
   String remark;
-  int stuId;
-  int studentNum;
-  String classCode;
-  String className;
-  int grade;
-  String gradeName;
-  String schoolLogo;
-  String schoolName;
-  int isMarked;
-  String updateTime;
-  String itemCode;
-  int schoolYear;
+  List<Role> roleList;
+  String schoolCode;
+  List<SchoolInfo> schoolInfoList;
+  List<ClassBean> teacherInfoList;
+  String userCode;
+  String userId;
+  String userLogo;
+  String userName;
+  String userSex;
+  String userStatus;
+  String userType;
+  String studentRemark;
+  UserBean studentInfo;
 
-  UserBean.fromJsonMap(Map<String, dynamic> json) {
-//    id
-//    userId
-//    userCode
-//    schoolCode
-//    userName
-//    userLogo
-//    userSex
-//    userType
-//    userStatus
-//    remark
-//    stuId
-//    studentNum
-//    classCode
-//    className
-//    grade
-//    gradeName
-//    schoolLogo
-//    schoolName
-//    isMarked
-//    updateTime
-//    itemCode
-//    schoolYear
+  UserBean(
+      {this.id,
+      this.remark,
+      this.roleList,
+      this.schoolCode,
+      this.schoolInfoList,
+      this.teacherInfoList,
+      this.userCode,
+      this.userId,
+      this.userLogo,
+      this.userName,
+      this.userSex,
+      this.userStatus,
+      this.userType,
+      this.studentRemark,
+      this.studentInfo});
 
-    id = json["id"];
-    userId = json["userId"];
-    userCode = json["userCode"];
-    schoolCode = json["schoolCode"];
-    userName = json["userName"];
-    userLogo = json["userLogo"];
-    userSex = json["userSex"];
-    userType = json["userType"];
-    userStatus = json["userStatus"];
-    remark = json["remark"];
-    stuId = json["stuId"];
-    studentNum = json["studentNum"];
-    classCode = json["classCode"];
-    className = json["className"];
-    grade = json["grade"];
-    gradeName = json["gradeName"];
-    schoolLogo = json["schoolLogo"];
-    schoolName = json["schoolName"];
-    isMarked = json["isMarked"];
-    updateTime = json["updateTime"];
-    itemCode = json["itemCode"];
-    schoolYear = json["schoolYear"];
+  factory UserBean.fromJson(Map<String, dynamic> json) {
+    return UserBean(
+      id: json['id'],
+      remark: json['remark'],
+      roleList: json['roleList'] != null
+          ? (json['roleList'] as List).map((i) => Role.fromJson(i)).toList()
+          : null,
+      schoolCode: json['schoolCode'],
+      schoolInfoList: json['schoolInfoList'] != null
+          ? (json['schoolInfoList'] as List)
+              .map((i) => SchoolInfo.fromJson(i))
+              .toList()
+          : null,
+      teacherInfoList: json['teacherInfoList'] != null
+          ? (json['teacherInfoList'] as List)
+              .map((i) => ClassBean.fromJson(i))
+              .toList()
+          : null,
+      userCode: json['userCode'],
+      userId: json['userId'],
+      userLogo: json['userLogo'],
+      userName: json['userName'],
+      userSex: json['userSex'],
+      userStatus: json['userStatus'],
+      userType: json['userType'],
+      studentRemark: json['studentRemark'],
+      studentInfo: json['studentInfo'] == null
+          ? null
+          : UserBean.fromJson(json['studentInfo']),
+    );
   }
 
-  Map toJsonMap() {
-    Map<String, dynamic> map = Map();
-    map['id'] = id;
-    map['userId'] = userId;
-    map['userCode'] = userCode;
-    map['schoolCode'] = schoolCode;
-    map['userName'] = userName;
-    map['userLogo'] = userLogo;
-    map['userSex'] = userSex;
-    map['userType'] = userType;
-    map['userStatus'] = userStatus;
-    map['remark'] = remark;
-    map['stuId'] = stuId;
-    map['studentNum'] = studentNum;
-    map['classCode'] = classCode;
-    map['className'] = className;
-    map['grade'] = grade;
-    map['gradeName'] = gradeName;
-    map['schoolLogo'] = schoolLogo;
-    map['schoolName'] = schoolName;
-    map['isMarked'] = isMarked;
-    map['updateTime'] = updateTime;
-    map['itemCode'] = itemCode;
-    map['schoolYear'] = schoolYear;
-    print(jsonEncode(map));
-    return map;
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['remark'] = this.remark;
+    data['schoolCode'] = this.schoolCode;
+    data['userCode'] = this.userCode;
+    data['userId'] = this.userId;
+    data['userLogo'] = this.userLogo;
+    data['userName'] = this.userName;
+    data['userSex'] = this.userSex;
+    data['userStatus'] = this.userStatus;
+    data['userType'] = this.userType;
+    data['studentRemark'] = this.studentRemark;
+    if (this.studentInfo != null) {
+      data['studentInfo'] = this.studentInfo.toJson();
+    }
+    if (this.roleList != null) {
+      data['roleList'] = this.roleList.map((v) => v.toJson()).toList();
+    }
+    if (this.schoolInfoList != null) {
+      data['schoolInfoList'] =
+          this.schoolInfoList.map((v) => v.toJson()).toList();
+    }
+    if (this.teacherInfoList != null) {
+      data['teacherInfoList'] =
+          this.teacherInfoList.map((v) => v.toJson()).toList();
+    }
+    return data;
   }
 
-  String toJson() {
-    return jsonEncode(toJsonMap());
+  @override
+  String toString() {
+    return jsonEncode(toJson());
   }
 }

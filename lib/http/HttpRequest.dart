@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:date_format/date_format.dart';
+import 'package:wande/factory/TokenFactory.dart';
 import 'package:wande/http/BaseResponse.dart';
 import 'package:wande/http/HttpRequestCallback.dart';
 import 'package:wande/utils/ShareUtils.dart';
@@ -69,7 +70,7 @@ class HttpRequest<T> {
     //添加公共参数
     params.addAll(popParams);
     //计算token
-    params['token'] = generateToken(params);
+    params['token'] = TokenFactory.generateToken(params, ShareUtils.token);
   }
 
   /**
@@ -108,9 +109,4 @@ class HttpRequest<T> {
     print(
         "▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲");
   }
-
-  /**
-   * 生成token
-   */
-  generateToken(Map<String, String> params) {}
 }

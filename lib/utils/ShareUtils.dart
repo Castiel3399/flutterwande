@@ -26,7 +26,7 @@ class ShareUtils {
   static saveUserBean(UserBean userBeanTemp) async {
     userBean = userBeanTemp;
     var sharedPreferences = await getShare();
-    await sharedPreferences.setString(USER_BEAN, userBeanTemp.toJson());
+    await sharedPreferences.setString(USER_BEAN, userBeanTemp.toString());
   }
 
   /**
@@ -39,7 +39,7 @@ class ShareUtils {
   static void initAppData() async {
     var sharedPreferences = await getShare();
     var userBeanJson = await sharedPreferences.getString(USER_BEAN);
-    userBean = UserBean.fromJsonMap(jsonDecode(userBeanJson));
+    userBean = UserBean.fromJson(jsonDecode(userBeanJson));
     devideId = await getDeviceId();
     token = await getToken();
     initDeviceId();
