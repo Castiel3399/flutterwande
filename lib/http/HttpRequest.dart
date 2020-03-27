@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:date_format/date_format.dart';
+import 'package:flutter/foundation.dart';
 import 'package:wande/factory/TokenFactory.dart';
 import 'package:wande/http/BaseResponse.dart';
 import 'package:wande/http/HttpRequestCallback.dart';
@@ -42,10 +43,12 @@ class HttpRequest<T> {
   void quest(HttpClientRequest request, HttpRequestCallback<T> callback) async {
     var response = await request.close();
     var statusCode = response.statusCode;
+//    if (!kReleaseMode)
     logRequest(request);
     if (statusCode == 200) {
       var json = await response.transform(utf8.decoder).join();
       var jsonObject = jsonDecode(json);
+//      if (!kReleaseMode)
       logResponse(jsonObject);
       BaseResponse baseResponse = BaseResponse<T>.fromJson(jsonObject);
       if (callback != null) {
@@ -104,9 +107,24 @@ class HttpRequest<T> {
   void logResponse(jsonObject) {
     //打印返回json数据
     print(
-        "▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼");
-    print("◆ result:" + jsonObject.toString());
+        "▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼");
+    var content = jsonObject.toString();
+    var maxLen = 140;
+    var lines = content.length / maxLen;
+
+    if (content.length % maxLen != 0) lines++;
+
+    for (int i = 0; i < lines; i++) {
+      var startIndex = i * maxLen;
+      if (startIndex > content.length) break;
+      var endIndex = (i + 1) * maxLen;
+      if (endIndex > content.length) {
+        endIndex = content.length;
+      }
+      print("◆ " + content.substring(startIndex, endIndex));
+    }
+
     print(
-        "▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲");
+        "▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲");
   }
 }

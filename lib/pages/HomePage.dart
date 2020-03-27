@@ -3,6 +3,9 @@ import 'package:wande/pages/HomePageEva.dart';
 import 'package:wande/pages/HomePageRank.dart';
 import 'package:wande/pages/HomePageUser.dart';
 
+/**
+ * 主页
+ */
 class HomePage extends StatefulWidget {
   @override
   HomePageState createState() {
@@ -11,16 +14,37 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+  /**
+   * 当前页
+   */
   var currentPage = 0;
+
+  /**
+   * 页面
+   */
   var homePages = [HomePageEva(), HomePageRank(), HomePageUser()];
+
+  /**
+   * pageView 控制
+   */
+  var pageControl = PageController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: homePages[currentPage],
-      bottomNavigationBar: BottomNavigationBar(
-          onTap: (index) {
+      body: PageView(
+        controller: pageControl,
+        onPageChanged: (index) {
+          setState(() {
             currentPage = index;
+          });
+        },
+        children: homePages,
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+          currentIndex: currentPage,
+          onTap: (index) {
+            pageControl.jumpToPage(index);
           },
           items: getNavigationItems()),
     );

@@ -31,8 +31,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-//        primaryColor: AppColors.color_primary,
-          ),
+        primaryColor: AppColors.color_primary,
+        accentColor: AppColors.color_accent,
+        primaryColorDark: AppColors.color_primary_dark,
+      ),
       home: LoginPage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -43,10 +45,10 @@ class LoginPage extends StatefulWidget {
   final String title;
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  LoginPageState createState() => LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class LoginPageState extends State<LoginPage> {
   TextEditingController mETAccount =
       TextEditingController.fromValue(TextEditingValue(text: "wdteacher"));
   TextEditingController mETPassword =
@@ -185,7 +187,9 @@ class _LoginPageState extends State<LoginPage> {
           ShareUtils.saveToken(token);
           ShareUtils.initAppData();
           //调主页面
-          Navigator.of(context).push(BasePageRouteBuilder(HomePage()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return HomePage();
+          }));
         }, onError: (errCode, errMsg) {
           Navigator.pop(context);
         }),

@@ -1,0 +1,4 @@
+<network-security-config>
+    <!--说明  Android 9.0  google 要求使用https安全链接    加入该配置解决该问题  本程序 实用 retrofit2 (OkHttp)-->
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>
