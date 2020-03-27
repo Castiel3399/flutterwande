@@ -39,6 +39,7 @@ class HomePageState extends State<HomePage> {
             currentPage = index;
           });
         },
+
         children: homePages,
       ),
       bottomNavigationBar: BottomNavigationBar(
