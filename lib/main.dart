@@ -14,7 +14,7 @@ import 'package:wande/http/HttpRequestCallback.dart';
 import 'package:wande/pages/HomePage.dart';
 import 'package:wande/res/AppColors.dart';
 import 'package:wande/res/AppDimens.dart';
-import 'package:wande/utils/share_utils.dart';
+import 'package:wande/utils/ShareUtils.dart';
 
 void main() {
   runApp(MyApp());

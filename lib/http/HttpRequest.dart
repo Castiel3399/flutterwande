@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:date_format/date_format.dart';
 import 'package:wande/http/BaseResponse.dart';
 import 'package:wande/http/HttpRequestCallback.dart';
-import 'package:wande/utils/share_utils.dart';
+import 'package:wande/utils/ShareUtils.dart';
 
 import 'HttpConfig.dart';
 
