@@ -56,6 +56,7 @@ class HttpRequest<T> {
       }
     } else {
       if (callback != null) callback.onError(statusCode, "数据获取异常");
+
     }
   }
 
