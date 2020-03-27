@@ -53,6 +53,7 @@ class HttpRequest<T> {
         } else {
           callback.onError(baseResponse.resultCode, baseResponse.getMsg());
         }
+
       }
     } else {
       if (callback != null) callback.onError(statusCode, "数据获取异常");
