@@ -21,7 +21,7 @@ class LoadingDialog extends StatelessWidget {
           Padding(
               padding: EdgeInsets.all(10),
               child: Text(
-                content,
+                content == null ? "" : content,
                 style: TextStyle(
                     color: Colors.white, fontSize: AppDimens.text_size_normal),
               )),

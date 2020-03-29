@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wande/pages/HomePageEva.dart';
 import 'package:wande/pages/HomePageRank.dart';
 import 'package:wande/pages/HomePageUser.dart';
+import 'package:wande/res/AppColors.dart';
 
 /**
  * 主页
@@ -32,14 +34,26 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView(
-        controller: pageControl,
-        onPageChanged: (index) {
-          setState(() {
-            currentPage = index;
-          });
-        },
-        children: homePages,
+      body: Column(
+        children: <Widget>[
+          SizedBox(
+              width: double.infinity,
+              height: MediaQuery.of(context).padding.top,
+              child: Container(
+                color: AppColors.color_primary,
+              )),
+          Expanded(
+            child: PageView(
+              controller: pageControl,
+              onPageChanged: (index) {
+                setState(() {
+                  currentPage = index;
+                });
+              },
+              children: homePages,
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
           currentIndex: currentPage,

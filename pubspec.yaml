@@ -25,9 +25,15 @@ dependencies:
   cupertino_icons: ^0.1.2
   #  fluttertoast: ^2.1.1
   crypto: ^2.0.6
+  #  sharePreferences 数据存储
   shared_preferences: ^0.5.3+4
+  #  uuid
   uuid: ^2.0.4
+  #  日期格式转换 (yyyy-mm-dd HH:MM:ss)
   date_format: ^1.0.8
+#    状态栏高度
+#  flutter_statusbar: ^0.0.1
+
 
 
 dev_dependencies:
@@ -91,4 +97,5 @@ flutter:
     - assets/images/icon_home_rank_checked.png
     - assets/images/icon_home_user.png
     - assets/images/icon_home_user_checked.png
+    - assets/images/icon_noti.png
 
