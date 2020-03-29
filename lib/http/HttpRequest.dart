@@ -18,8 +18,6 @@ class HttpRequest<T> {
   void requestGet(String unencodedPath, HttpRequestCallback<T> callback,
       Map<String, String> params) async {
     addPopParamsAndToken(params);
-
-
     quest(await HttpClient().getUrl(getUri(unencodedPath, params)), callback);
   }
 
@@ -55,7 +53,8 @@ class HttpRequest<T> {
       logResponse(jsonObject);
       BaseResponse baseResponse = BaseResponse<T>.fromJson(jsonObject);
       if (callback != null) {
-        if (baseResponse.getResultCode()==HttpResultCode.RESULT_CODE_SUCCESS) {
+        if (baseResponse.getResultCode() ==
+            HttpResultCode.RESULT_CODE_SUCCESS) {
           callback.onSuccess(baseResponse.data);
         } else {
           callback.onError(baseResponse.resultCode, baseResponse.getMsg());
@@ -76,7 +75,8 @@ class HttpRequest<T> {
     //添加公共参数
     requestParams.addAll(popParams);
     //计算token
-    requestParams['token'] = TokenFactory.generateToken(requestParams, ShareUtils.token);
+    requestParams['token'] =
+        TokenFactory.generateToken(requestParams, ShareUtils.token);
   }
 
   /**
