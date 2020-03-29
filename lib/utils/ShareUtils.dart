@@ -36,13 +36,12 @@ class ShareUtils {
     return userBean;
   }
 
-  static void initAppData() async {
+  static Future initAppData() async {
     var sharedPreferences = await getShare();
     var userBeanJson = await sharedPreferences.getString(USER_BEAN);
     userBean = UserBean.fromJson(jsonDecode(userBeanJson));
-    devideId = await getDeviceId();
     token = await getToken();
-    initDeviceId();
+    devideId = await initDeviceId();
   }
 
   /**
@@ -72,7 +71,8 @@ class ShareUtils {
   /**
    * 保存token
    */
-  static saveToken(token) async {
+  static saveToken(tokenTemp) async {
+    token = tokenTemp;
     var sharedPreferences = await getShare();
     await sharedPreferences.setString(TOKEN, token);
   }
@@ -84,11 +84,18 @@ class ShareUtils {
     return devideId;
   }
 
-  static void initDeviceId() async {
+  static Future<String> initDeviceId() async {
     devideId = (await getShare()).getString(DEVICE_ID);
     if (devideId == null || devideId.isEmpty) {
       devideId = Uuid().v1();
       (await getShare()).setString(DEVICE_ID, devideId);
     }
+  }
+
+  static Future saveUserBeanAndTokenAndInitAppData(
+      UserBean userBean, String token) async {
+    await saveUserBean(userBean);
+    await saveToken(token);
+    await initDeviceId();
   }
 }

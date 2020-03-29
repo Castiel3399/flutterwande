@@ -181,13 +181,12 @@ class LoginPageState extends State<LoginPage> {
         HttpRequestCallback(onSuccess: (token) {
           //获取token成功
           Navigator.pop(context);
-          ShareUtils.saveUserBean(userBean);
-          ShareUtils.saveToken(token);
-          ShareUtils.initAppData();
-          //调主页面
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return HomePage();
-          }));
+          ShareUtils.saveUserBeanAndTokenAndInitAppData(userBean, token)
+              .whenComplete(() {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return HomePage();
+            }));
+          });
         }, onError: (errCode, errMsg) {
           Navigator.pop(context);
         }),

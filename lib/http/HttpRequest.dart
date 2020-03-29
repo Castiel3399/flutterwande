@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:wande/factory/TokenFactory.dart';
 import 'package:wande/http/BaseResponse.dart';
 import 'package:wande/http/HttpRequestCallback.dart';
+import 'package:wande/http/HttpResultCode.dart';
 import 'package:wande/utils/ShareUtils.dart';
 
 import 'HttpConfig.dart';
@@ -52,7 +53,7 @@ class HttpRequest<T> {
       logResponse(jsonObject);
       BaseResponse baseResponse = BaseResponse<T>.fromJson(jsonObject);
       if (callback != null) {
-        if (baseResponse.getSuccess()) {
+        if (baseResponse.getResultCode()==HttpResultCode.RESULT_CODE_SUCCESS) {
           callback.onSuccess(baseResponse.data);
         } else {
           callback.onError(baseResponse.resultCode, baseResponse.getMsg());
@@ -68,12 +69,12 @@ class HttpRequest<T> {
    *
    * 添加公共参数
    */
-  void addPopParamsAndToken(Map<String, String> params) {
+  void addPopParamsAndToken(Map<String, String> requestParams) {
     var popParams = generatePopParams();
     //添加公共参数
-    params.addAll(popParams);
+    requestParams.addAll(popParams);
     //计算token
-    params['token'] = TokenFactory.generateToken(params, ShareUtils.token);
+    requestParams['token'] = TokenFactory.generateToken(requestParams, ShareUtils.token);
   }
 
   /**
@@ -82,7 +83,7 @@ class HttpRequest<T> {
   generatePopParams() {
     Map<String, String> map = Map();
     map['appType'] = Platform.operatingSystem;
-    map['systemVersion'] = Platform.operatingSystemVersion;
+    map['systemVersion'] = 23.toString();
     map['clientVersion'] = "1.0.0";
     map['clientPackage'] = "com.xueduoduo.wande.evaluation";
     map['deviceId'] = ShareUtils.getDeviceId();
@@ -93,7 +94,7 @@ class HttpRequest<T> {
 
     var userBean = ShareUtils.getUserBean();
     if (userBean != null) {
-      map['operateId'] = ShareUtils.getUserBean().userId;
+      map['operatorId'] = ShareUtils.getUserBean().userId;
       map['schoolCode'] = ShareUtils.getUserBean().schoolCode;
     }
     return map;
@@ -109,7 +110,7 @@ class HttpRequest<T> {
     print(
         "▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼");
     var content = jsonObject.toString();
-    var maxLen = 140;
+    var maxLen = 120;
     var lines = content.length / maxLen;
 
     if (content.length % maxLen != 0) lines++;

@@ -11,7 +11,7 @@ class BaseResponse<T> {
     return msg;
   }
 
-  getRecultCode() {
+  getResultCode() {
     return resultCode;
   }
 
@@ -23,6 +23,7 @@ class BaseResponse<T> {
     success = json["success"];
     time = json["time"];
     msg = json["msg"];
+    resultCode = json["resultCode"];
     data = EntityFactory.generateOBJ<T>(json["data"]);
   }
 }

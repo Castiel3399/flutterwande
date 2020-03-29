@@ -27,4 +27,29 @@ void main() {
     expect(find.text('0'), findsNothing);
     expect(find.text('1'), findsOneWidget);
   });
+//    http://47.103.206.101:8210/juvenile-mobile/juvenile/eval/getActivityItemList?
+//    grade=4&
+//    accessKey=wd-client-mobile&
+//    appType=android&
+//    clientPackage=com.xueduoduo.wande.evaluation.test&
+//    rdmTime=2020-03-29%2016:27:23&
+//    clientVersion=1.0.0&
+//    systemVersion=27&
+//    deviceId=111cf30d-4453-4944-8ba6-2e9eaeebfc0d&
+//    operatorId=914&
+//    schoolCode=PDWDXX&
+//    token=745ff0fb5029785d
+
+//    http://47.103.206.101:8210/juvenile-mobile/juvenile/eval/getActivityItemList?
+//    grade=5&
+//    appType=android&
+//    systemVersion=23&
+//    clientVersion=1.0.0&
+//    clientPackage=com.xueduoduo.wande.evaluation&
+//    deviceId=51ee0b20-7187-11ea-82c1-d56249e19519&
+//    accessKey=wd-client-mobile&
+//    rdmTime=2020-03-29+16%3A27%3A58&
+//    operateId=914&
+//    schoolCode=PDWDXX&
+//    token=99cceb3d966fc383
 }

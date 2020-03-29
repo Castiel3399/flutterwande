@@ -14,7 +14,7 @@ generateActionBar(text) {
       alignment: AlignmentDirectional.center,
       color: AppColors.color_primary,
       child: Text(
-        "评价",
+        text,
         style:
             TextStyle(fontSize: AppDimens.text_size_large, color: Colors.white),
       ),
