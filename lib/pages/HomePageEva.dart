@@ -12,6 +12,7 @@ class HomePageEva extends StatelessWidget {
           showDialog(context: context, child: LoadingDialog());
         }),
         Expanded(
+
           flex: 1,
           child: ListView(),
         ),
