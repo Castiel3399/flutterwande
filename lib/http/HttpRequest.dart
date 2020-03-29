@@ -18,6 +18,7 @@ class HttpRequest<T> {
   void requestGet(String unencodedPath, HttpRequestCallback<T> callback,
       Map<String, String> params) async {
     addPopParamsAndToken(params);
+
     quest(await HttpClient().getUrl(getUri(unencodedPath, params)), callback);
   }
 
