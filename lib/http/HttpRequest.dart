@@ -54,14 +54,14 @@ class HttpRequest<K, T> {
 
       if (callback != null) {
         HttpBaseResponse httpBaseResponse = null;
-        if (callback.onSuccessPageData != null) {
+        if (callback.type == HttpRequestCallback.TYPE_PAGE_DATA) {
 //          httpBaseResponse = HttpNormalResponse<T>.fromJson(jsonObject);
-        } else if (callback.onSuccessList != null) {
+        } else if (callback.type == HttpRequestCallback.TYPE_LIST) {
           httpBaseResponse = HttpListResponse<T>.fromJson(jsonObject);
-        } else if (callback.onSuccess != null) {
+        } else if (callback.type == HttpRequestCallback.TYPE_NORMAL) {
           httpBaseResponse = HttpNormalResponse<T>.fromJson(jsonObject);
         }
-        callback.onSuccess((httpBaseResponse as HttpNormalResponse).data);
+        print(callback.type);
 
         if (httpBaseResponse.getResultCode() ==
             HttpResultCode.RESULT_CODE_SUCCESS) {

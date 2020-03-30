@@ -7,6 +7,11 @@ typedef void ResponseErrorCallback(int errorCode, String errMsg);
  * 单类 回调
  */
 class HttpRequestCallback<T> {
+  static var TYPE_NORMAL = 1;
+  static var TYPE_LIST = 2;
+  static var TYPE_PAGE_DATA = 3;
+  var type = TYPE_NORMAL;
+
   /**
    * 成功回调
    */
@@ -38,5 +43,13 @@ class HttpRequestCallback<T> {
       {this.onSuccess,
       this.onSuccessList,
       this.onSuccessPageData,
-      this.onError});
+      this.onError}) {
+    if (this.onSuccess != null) {
+      type = TYPE_NORMAL;
+    } else if (this.onSuccessList != null) {
+      type = TYPE_LIST;
+    } else if (this.onSuccessPageData != null) {
+      type = TYPE_PAGE_DATA;
+    }
+  }
 }
