@@ -29,18 +29,11 @@ class ShareUtils {
     await sharedPreferences.setString(USER_BEAN, userBeanTemp.toString());
   }
 
-  /**
-   * 获取用户bean
-   */
-  static UserBean getUserBean() {
-    return userBean;
-  }
-
   static Future initAppData() async {
     var sharedPreferences = await getShare();
     var userBeanJson = await sharedPreferences.getString(USER_BEAN);
     userBean = UserBean.fromJson(jsonDecode(userBeanJson));
-    token = await getToken();
+    token = await initToken();
     devideId = await initDeviceId();
   }
 
@@ -57,15 +50,15 @@ class ShareUtils {
    */
   static Future<bool> getIsLogin() async {
     var sharedPreferences = await getShare();
-    return await sharedPreferences.getBool(IS_LOGIN);
+    return sharedPreferences.getBool(IS_LOGIN);
   }
 
   /**
    * 获取token
    */
-  static Future<String> getToken() async {
+  static Future<String> initToken() async {
     var sharedPreferences = await getShare();
-    return await sharedPreferences.getString(TOKEN);
+    return sharedPreferences.getString(TOKEN);
   }
 
   /**
@@ -75,6 +68,7 @@ class ShareUtils {
     token = tokenTemp;
     var sharedPreferences = await getShare();
     await sharedPreferences.setString(TOKEN, token);
+    print("save token:" + token);
   }
 
   /**
@@ -92,10 +86,8 @@ class ShareUtils {
     }
   }
 
-  static Future saveUserBeanAndTokenAndInitAppData(
-      UserBean userBean, String token) async {
+  static Future saveUserBeanAndToken(UserBean userBean, String token) async {
     await saveUserBean(userBean);
     await saveToken(token);
-    await initDeviceId();
   }
 }

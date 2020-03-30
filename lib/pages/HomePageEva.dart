@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:wande/bean/EvaBean.dart';
 import 'package:wande/dialog/LoadingDialog.dart';
 import 'package:wande/http/HttpConfig.dart';
 import 'package:wande/http/HttpRequest.dart';
-import 'package:wande/http/HttpRequestCallback.dart';
+import 'package:wande/http/callback/HttpRequestCallback.dart';
+import 'package:wande/http/response/HttpBaseResponse.dart';
 import 'package:wande/layouts/Layouts.dart';
 import 'package:wande/utils/ShareUtils.dart';
 
 class HomePageEva extends StatelessWidget {
-   @override
+  @override
   Widget build(BuildContext context) {
     //listView
 
-     requestData();
+    requestData();
     return Column(
       children: <Widget>[
         generateActionBarWithMenu(context, "评价", "assets/images/icon_noti.png",
@@ -36,7 +38,8 @@ class HomePageEva extends StatelessWidget {
   void requestData() {
     HttpRequest().requestGet(
       HttpConfig.GET_ACTIVITY_ITEM_LIST,
-      HttpRequestCallback(onSuccess: (resutlt) {}, onError: (code, errMsg) {}),
+      HttpRequestCallback<List<EvaBean>>(
+          onSuccess: (resutlt) {}, onError: (code, errMsg) {}),
       {'grade': 5.toString()},
     );
   }

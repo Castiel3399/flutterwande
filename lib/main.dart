@@ -8,17 +8,20 @@ import 'package:flutter/services.dart';
 import 'package:wande/bean/UserBean.dart';
 import 'package:wande/dialog/LoadingDialog.dart';
 import 'package:wande/http/HttpRequest.dart';
-import 'package:wande/http/HttpRequestCallback.dart';
+import 'package:wande/http/callback/HttpRequestCallback.dart';
+import 'package:wande/http/response/HttpNormalResponse.dart';
 import 'package:wande/pages/HomePage.dart';
 import 'package:wande/res/AppColors.dart';
 import 'package:wande/res/AppDimens.dart';
 import 'package:wande/utils/ShareUtils.dart';
 
+import 'http/response/HttpBaseResponse.dart';
+
 void main() {
   runApp(MyApp());
   if (Platform.isAndroid) {
-    SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+//    SystemChrome.setSystemUIOverlayStyle(
+//        SystemUiOverlayStyle(statusBarColor: Colors.transparent));
   }
 }
 
@@ -162,27 +165,33 @@ class LoginPageState extends State<LoginPage> {
           content: "登录中",
         ));
 
-    HttpRequest<UserBean>().requestPost(
-        "core/oauth/login",
-        HttpRequestCallback(onSuccess: (result) {
-          requestToken(result);
-        }, onError: (errCode, errMsg) {
-          Navigator.pop(context);
-        }),
-        {
-          'userCode': account,
-          'userPwd': md5.convert(utf8.encode(password)).toString()
-        });
+    //设备id
+    ShareUtils.initDeviceId().whenComplete(() {
+      //获取到设备ID
+      HttpRequest().requestPost(
+          "core/oauth/login",
+          HttpRequestCallback<UserBean>(onSuccess: (result) {
+            requestToken(result);
+          }, onError: (errCode, errMsg) {
+            Navigator.pop(context);
+          }),
+          {
+            'userCode': account,
+            'userPwd': md5.convert(utf8.encode(password)).toString()
+          });
+    });
   }
 
+  /**
+   * 请求token
+   */
   requestToken(UserBean userBean) {
-    HttpRequest<String>().requestPost(
+    HttpRequest().requestPost(
         "core/oauth/accessToken",
-        HttpRequestCallback(onSuccess: (token) {
+        HttpRequestCallback<String>(onSuccess: (token) {
           //获取token成功
           Navigator.pop(context);
-          ShareUtils.saveUserBeanAndTokenAndInitAppData(userBean, token)
-              .whenComplete(() {
+          ShareUtils.saveUserBeanAndToken(userBean, token).whenComplete(() {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
               return HomePage();
             }));

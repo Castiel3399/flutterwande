@@ -1,11 +1,9 @@
-import 'package:wande/factory/EntityFactory.dart';
-
-class BaseResponse<T> {
+abstract class HttpBaseResponse {
   bool success;
   String msg;
   String time;
   int resultCode;
-  T data;
+
 
   getMsg() {
     return msg;
@@ -19,11 +17,10 @@ class BaseResponse<T> {
     return success;
   }
 
-  BaseResponse.fromJson(Map<String, dynamic> json) {
+  HttpBaseResponse.fromJson(dynamic json) {
     success = json["success"];
-    time = json["time"];
     msg = json["msg"];
+    time = json["time"];
     resultCode = json["resultCode"];
-    data = EntityFactory.generateOBJ<T>(json["data"]);
   }
 }

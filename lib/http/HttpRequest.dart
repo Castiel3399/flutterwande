@@ -4,14 +4,16 @@ import 'dart:io';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/foundation.dart';
 import 'package:wande/factory/TokenFactory.dart';
-import 'package:wande/http/BaseResponse.dart';
-import 'package:wande/http/HttpRequestCallback.dart';
 import 'package:wande/http/HttpResultCode.dart';
+import 'package:wande/http/response/HttpBaseResponse.dart';
+import 'package:wande/http/response/HttpListResponse.dart';
+import 'package:wande/http/response/HttpNormalResponse.dart';
 import 'package:wande/utils/ShareUtils.dart';
 
 import 'HttpConfig.dart';
+import 'callback/HttpRequestCallback.dart';
 
-class HttpRequest<T> {
+class HttpRequest<K, T> {
   /**
    * get 请求
    */
@@ -44,20 +46,35 @@ class HttpRequest<T> {
   void quest(HttpClientRequest request, HttpRequestCallback<T> callback) async {
     var response = await request.close();
     var statusCode = response.statusCode;
-//    if (!kReleaseMode)
-    logRequest(request);
+    if (!kReleaseMode) logRequest(request);
     if (statusCode == 200) {
       var json = await response.transform(utf8.decoder).join();
+      if (!kReleaseMode) logResponse(json);
       var jsonObject = jsonDecode(json);
-//      if (!kReleaseMode)
-      logResponse(jsonObject);
-      BaseResponse baseResponse = BaseResponse<T>.fromJson(jsonObject);
+
       if (callback != null) {
-        if (baseResponse.getResultCode() ==
+        HttpBaseResponse httpBaseResponse = null;
+        if (callback.onSuccessPageData != null) {
+//          httpBaseResponse = HttpNormalResponse<T>.fromJson(jsonObject);
+        } else if (callback.onSuccessList != null) {
+          httpBaseResponse = HttpListResponse<T>.fromJson(jsonObject);
+        } else if (callback.onSuccess != null) {
+          httpBaseResponse = HttpNormalResponse<T>.fromJson(jsonObject);
+        }
+        callback.onSuccess((httpBaseResponse as HttpNormalResponse).data);
+
+        if (httpBaseResponse.getResultCode() ==
             HttpResultCode.RESULT_CODE_SUCCESS) {
-          callback.onSuccess(baseResponse.data);
+          if (response is HttpNormalResponse) {
+            //单类
+            callback.onSuccess((httpBaseResponse as HttpNormalResponse).data);
+          } else if (response is HttpListResponse) {
+            //集合
+            callback.onSuccessList((httpBaseResponse as HttpListResponse).data);
+          }
         } else {
-          callback.onError(baseResponse.resultCode, baseResponse.getMsg());
+          callback.onError(
+              httpBaseResponse.resultCode, httpBaseResponse.getMsg());
         }
       }
     } else {
@@ -85,19 +102,18 @@ class HttpRequest<T> {
   generatePopParams() {
     Map<String, String> map = Map();
     map['appType'] = Platform.operatingSystem;
-    map['systemVersion'] = 23.toString();
+    map['systemVersion'] = Platform.version;
     map['clientVersion'] = "1.0.0";
     map['clientPackage'] = "com.xueduoduo.wande.evaluation";
-    map['deviceId'] = ShareUtils.getDeviceId();
+    map['deviceId'] = ShareUtils.devideId;
     map['accessKey'] = HttpConfig.ACCESS_KEY;
     var dateFormat = formatDate(
         DateTime.now(), [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn, ':', ss]);
     map['rdmTime'] = dateFormat;
 
-    var userBean = ShareUtils.getUserBean();
-    if (userBean != null) {
-      map['operatorId'] = ShareUtils.getUserBean().userId;
-      map['schoolCode'] = ShareUtils.getUserBean().schoolCode;
+    if (ShareUtils.userBean != null) {
+      map['operatorId'] = ShareUtils.userBean.userId;
+      map['schoolCode'] = ShareUtils.userBean.schoolCode;
     }
     return map;
   }
