@@ -5,6 +5,7 @@ import 'package:wande/http/HttpConfig.dart';
 import 'package:wande/http/HttpRequest.dart';
 import 'package:wande/http/callback/HttpRequestCallback.dart';
 import 'package:wande/http/response/HttpBaseResponse.dart';
+import 'package:wande/http/response/HttpListResponse.dart';
 import 'package:wande/layouts/Layouts.dart';
 import 'package:wande/utils/ShareUtils.dart';
 
@@ -36,7 +37,7 @@ class HomePageEva extends StatelessWidget {
   }
 
   void requestData() {
-    HttpRequest().requestGet<List<EvaBean>>(
+    HttpRequest().requestGet<HttpListResponse, EvaBean>(
       HttpConfig.GET_ACTIVITY_ITEM_LIST,
       HttpRequestCallback(onSuccessList: (result) {
         print(result.length);

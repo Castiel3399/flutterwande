@@ -168,7 +168,7 @@ class LoginPageState extends State<LoginPage> {
     //设备id
     ShareUtils.initDeviceId().whenComplete(() {
       //获取到设备ID
-      HttpRequest().requestPost<UserBean>(
+      HttpRequest().requestPost<HttpBaseResponse,UserBean>(
           "core/oauth/login",
           HttpRequestCallback(onSuccess: (result) {
             requestToken(result);
@@ -186,7 +186,7 @@ class LoginPageState extends State<LoginPage> {
    * 请求token
    */
   requestToken(UserBean userBean) {
-    HttpRequest().requestPost<String>(
+    HttpRequest().requestPost<HttpBaseResponse, String>(
         "core/oauth/accessToken",
         HttpRequestCallback(onSuccess: (token) {
           //获取token成功

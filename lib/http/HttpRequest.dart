@@ -8,6 +8,7 @@ import 'package:wande/http/HttpResultCode.dart';
 import 'package:wande/http/response/HttpBaseResponse.dart';
 import 'package:wande/http/response/HttpListResponse.dart';
 import 'package:wande/http/response/HttpNormalResponse.dart';
+import 'package:wande/http/response/HttpPageResponse.dart';
 import 'package:wande/utils/ShareUtils.dart';
 
 import 'HttpConfig.dart';
@@ -21,8 +22,8 @@ class HttpRequest {
   /**
    * get 请求
    */
-  void requestGet<T>(String unencodedPath, HttpRequestCallback<T> callback,
-      Map<String, String> params) async {
+  void requestGet<K, T>(String unencodedPath,
+      HttpRequestCallback<K, T> callback, Map<String, String> params) async {
     addPopParamsAndToken(params);
     quest(await HttpClient().getUrl(getUri(unencodedPath, params)), callback);
   }
@@ -30,8 +31,8 @@ class HttpRequest {
   /**
    * post 请求
    */
-  void requestPost<T>(String unencodedPath, HttpRequestCallback<T> callback,
-      Map<String, String> params) async {
+  void requestPost<K, T>(String unencodedPath,
+      HttpRequestCallback<K, T> callback, Map<String, String> params) async {
     addPopParamsAndToken(params);
     quest(await HttpClient().postUrl(getUri(unencodedPath, params)), callback);
   }
@@ -47,8 +48,8 @@ class HttpRequest {
   /**
    * 返回处理
    */
-  void quest<T>(
-      HttpClientRequest request, HttpRequestCallback<T> callback) async {
+  void quest<K, T>(
+      HttpClientRequest request, HttpRequestCallback<K, T> callback) async {
     var response = await request.close();
     var statusCode = response.statusCode;
     if (!kReleaseMode) logRequest(request);
@@ -58,15 +59,15 @@ class HttpRequest {
       var jsonObject = jsonDecode(json);
 
       if (callback != null) {
-        var classType = T.toString();
-        var requestType = classType.startsWith("List<")
+        var requestType = K.toString().contains("HttpListResponse")
             ? REQUEST_TYPE_LIST
-            : classType.startsWith("PageData<")
+            : (K.toString().contains("HttpPageResponse")
                 ? REQUEST_TYPE_PAGE
-                : REQUEST_TYPE_NORMAL;
+                : REQUEST_TYPE_NORMAL);
 
         HttpBaseResponse httpBaseResponse = null;
         if (requestType == REQUEST_TYPE_PAGE) {
+          httpBaseResponse = HttpPageResponse<T>.fromJson(jsonObject);
         } else if (requestType == REQUEST_TYPE_LIST) {
           httpBaseResponse = HttpListResponse<T>.fromJson(jsonObject);
         } else if (requestType == REQUEST_TYPE_NORMAL) {
@@ -77,6 +78,8 @@ class HttpRequest {
             httpBaseResponse.getResultCode() ==
                 HttpResultCode.RESULT_CODE_SUCCESS) {
           if (requestType == REQUEST_TYPE_PAGE) {
+            //分页
+            callback.onSuccessPage((httpBaseResponse as HttpPageResponse).data);
           } else if (requestType == REQUEST_TYPE_LIST) {
             //集合
             callback.onSuccessList((httpBaseResponse as HttpListResponse).data);

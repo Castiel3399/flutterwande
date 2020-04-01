@@ -14,8 +14,6 @@ class EntityFactory {
 
   static List<T> generateOBJList<T>(dynamic json) {
     if (json == null) return null;
-    return (json as List)
-        .map((jsonItem) => json[jsonItem] = generateOBJ(jsonItem))
-        .toList() as List<T>;
+    return (json as List).map((jsonItem) => generateOBJ<T>(jsonItem)).toList();
   }
 }
