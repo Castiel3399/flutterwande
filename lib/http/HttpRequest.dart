@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:date_format/date_format.dart';
 import 'package:flutter/foundation.dart';
-import 'package:wande/bean/EvaBean.dart';
 import 'package:wande/factory/TokenFactory.dart';
 import 'package:wande/http/HttpResultCode.dart';
 import 'package:wande/http/response/HttpBaseResponse.dart';
@@ -78,10 +77,9 @@ class HttpRequest {
             httpBaseResponse.getResultCode() ==
                 HttpResultCode.RESULT_CODE_SUCCESS) {
           if (requestType == REQUEST_TYPE_PAGE) {
-
           } else if (requestType == REQUEST_TYPE_LIST) {
             //集合
-            callback.onSuccess((httpBaseResponse as HttpListResponse).data);
+            callback.onSuccessList((httpBaseResponse as HttpListResponse).data);
           } else if (requestType == REQUEST_TYPE_NORMAL) {
             //单类
             callback.onSuccess((httpBaseResponse as HttpNormalResponse).data);

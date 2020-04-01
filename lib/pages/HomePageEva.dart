@@ -38,7 +38,11 @@ class HomePageEva extends StatelessWidget {
   void requestData() {
     HttpRequest().requestGet<List<EvaBean>>(
       HttpConfig.GET_ACTIVITY_ITEM_LIST,
-      HttpRequestCallback(onSuccess: (result) {}, onError: (code, errMsg) {}),
+      HttpRequestCallback(onSuccessList: (result) {
+        print(result.length);
+      }, onError: (code, errMsg) {
+        print("error");
+      }),
       {'grade': 5.toString()},
     );
   }

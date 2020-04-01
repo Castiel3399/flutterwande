@@ -12,10 +12,10 @@ class EntityFactory {
     }
   }
 
-  static T generateOBJList<T>(dynamic json) {
+  static List<T> generateOBJList<T>(dynamic json) {
     if (json == null) return null;
     return (json as List)
-        .map((jsonItem) => json[jsonItem] = generateOBJ<T>(jsonItem))
-        .toList();
+        .map((jsonItem) => json[jsonItem] = generateOBJ(jsonItem))
+        .toList() as List<T>;
   }
 }
