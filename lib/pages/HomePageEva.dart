@@ -1,20 +1,34 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:wande/bean/EvaBean.dart';
 import 'package:wande/dialog/LoadingDialog.dart';
 import 'package:wande/http/HttpConfig.dart';
 import 'package:wande/http/HttpRequest.dart';
 import 'package:wande/http/callback/HttpRequestCallback.dart';
-import 'package:wande/http/response/HttpBaseResponse.dart';
 import 'package:wande/http/response/HttpListResponse.dart';
 import 'package:wande/layouts/Layouts.dart';
-import 'package:wande/utils/ShareUtils.dart';
 
 class HomePageEva extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    //listView
+    // TODO: implement build
+    return HomePageView();
+  }
+}
 
-    requestData();
+class HomePageView extends StatefulWidget {
+  @override
+  HomePageState createState() {
+    return HomePageState();
+  }
+}
+
+class HomePageState extends State<HomePageView> {
+  List<EvaBean> dataList;
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         generateActionBarWithMenu(context, "评价", "assets/images/icon_noti.png",
@@ -25,9 +39,11 @@ class HomePageEva extends StatelessWidget {
           flex: 1,
           child: Container(
             child: RefreshIndicator(
-              child: ListView(),
+              child: ListView.builder(
+                  itemCount: dataList == null ? 0 : dataList.length,
+                  itemBuilder: (context, index) => getItemView(index)),
               onRefresh: () {
-                requestData();
+                return requestData();
               },
             ),
           ),
@@ -36,15 +52,31 @@ class HomePageEva extends StatelessWidget {
     );
   }
 
-  void requestData() {
-    HttpRequest().requestGet<HttpListResponse, EvaBean>(
+  Future<bool> requestData() async {
+    return await HttpRequest().requestGet<HttpListResponse, EvaBean>(
       HttpConfig.GET_ACTIVITY_ITEM_LIST,
       HttpRequestCallback(onSuccessList: (result) {
+        setState(() {
+          dataList = result;
+        });
         print(result.length);
       }, onError: (code, errMsg) {
+        setState(() {
+          dataList = null;
+        });
         print("error");
       }),
       {'grade': 5.toString()},
     );
+  }
+
+  getItemView(int index) {
+    return Text(dataList[index].itemName);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    requestData();
   }
 }

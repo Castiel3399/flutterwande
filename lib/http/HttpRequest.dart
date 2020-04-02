@@ -22,19 +22,21 @@ class HttpRequest {
   /**
    * get 请求
    */
-  void requestGet<K, T>(String unencodedPath,
+  Future<bool> requestGet<K, T>(String unencodedPath,
       HttpRequestCallback<K, T> callback, Map<String, String> params) async {
     addPopParamsAndToken(params);
-    quest(await HttpClient().getUrl(getUri(unencodedPath, params)), callback);
+    return quest(
+        await HttpClient().getUrl(getUri(unencodedPath, params)), callback);
   }
 
   /**
    * post 请求
    */
-  void requestPost<K, T>(String unencodedPath,
+  Future<bool> requestPost<K, T>(String unencodedPath,
       HttpRequestCallback<K, T> callback, Map<String, String> params) async {
     addPopParamsAndToken(params);
-    quest(await HttpClient().postUrl(getUri(unencodedPath, params)), callback);
+    return quest(
+        await HttpClient().postUrl(getUri(unencodedPath, params)), callback);
   }
 
   /**
@@ -48,7 +50,7 @@ class HttpRequest {
   /**
    * 返回处理
    */
-  void quest<K, T>(
+  Future<bool> quest<K, T>(
       HttpClientRequest request, HttpRequestCallback<K, T> callback) async {
     var response = await request.close();
     var statusCode = response.statusCode;
@@ -80,12 +82,15 @@ class HttpRequest {
           if (requestType == REQUEST_TYPE_PAGE) {
             //分页
             callback.onSuccessPage((httpBaseResponse as HttpPageResponse).data);
+            return true;
           } else if (requestType == REQUEST_TYPE_LIST) {
             //集合
             callback.onSuccessList((httpBaseResponse as HttpListResponse).data);
+            return true;
           } else if (requestType == REQUEST_TYPE_NORMAL) {
             //单类
             callback.onSuccess((httpBaseResponse as HttpNormalResponse).data);
+            return true;
           }
         } else {
           callback.onError(
@@ -95,6 +100,7 @@ class HttpRequest {
     } else {
       if (callback != null) callback.onError(statusCode, "数据获取异常");
     }
+    return false;
   }
 
   /**
