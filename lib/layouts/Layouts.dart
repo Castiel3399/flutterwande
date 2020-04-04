@@ -61,3 +61,34 @@ generateActionBarWithMenu(context, text, String iconPath, callback) {
     ),
   );
 }
+
+/**
+ * 水波纹层
+ */
+getRippleLayout(double height, double radius, {GestureTapCallback callback}) {
+  return SizedBox(
+      width: double.infinity,
+      height: height,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.all(Radius.circular(radius)),
+          splashColor: AppColors.color_ripple,
+          highlightColor: AppColors.color_ripple_hight,
+          onTap: callback == null ? () {} : GestureTapCallback,
+        ),
+      ));
+}
+
+/**
+ * 水波纹层
+ */
+getRippleLayout2(double height, double radius, Widget child,
+    {GestureTapCallback callback}) {
+  return Stack(
+    children: <Widget>[
+      child,
+      getRippleLayout(height, radius, callback: callback)
+    ],
+  );
+}

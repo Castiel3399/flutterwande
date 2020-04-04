@@ -99,4 +99,10 @@ flutter:
     - assets/images/icon_home_user.png
     - assets/images/icon_home_user_checked.png
     - assets/images/icon_noti.png
+    - assets/images/icon_project_xd.png
+    - assets/images/icon_project_jt.png
+    - assets/images/icon_project_qz.png
+    - assets/images/icon_project_xk.png
+    - assets/images/icon_project_xy.png
+    - assets/images/icon_home_eva_item_open.png
 

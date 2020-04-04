@@ -34,6 +34,7 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.color_bg,
       body: Column(
         children: <Widget>[
           SizedBox(
