@@ -37,6 +37,7 @@ class HomePageState extends State<HomePageView> {
             () {
           showDialog(context: context, child: LoadingDialog());
         }),
+
         Expanded(
           flex: 1,
           child: RefreshIndicator(
